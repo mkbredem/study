@@ -1,0 +1,26 @@
+---
+- name: Initial windows 2019 configuration
+  hosts: "{{ target_hosts }}"
+
+#Looking to automate our user creation and removal processes. 
+#We support a call center environment so high turnover, usually 
+#getting 10-20+ forms at a time. We'd like to be able to to either 
+#load a form and have it read the PDF or just enter user info and 
+#have it create accounts in AD, synchronize to Azure, add M365 
+#licenses, if possible generate templates to import into RingCentral
+
+  tasks:
+    - name: add new users to active directory
+      ansible.windows.win_domain_user:
+        name: "{{ item.username }}"
+        password: "{{ _password_ }}"
+        state: present
+        groups:
+          - Administrators
+      loop: "{{ users }}"
+
+#    - name: install microsoft 365 on windows 2019
+
+#    - name: generate templates to import into RingCentral
+
+
