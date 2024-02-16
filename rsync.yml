@@ -12,10 +12,10 @@
         mode: '0755'
       run_once: True
 
-    - name: show files in /tmp directory with permissions and ownership
-      ansible.builtin.command: ls -l /tmp/
+    - name: show files in tmp directory with permissions and ownership
+      ansible.builtin.command: ls -la /tmp/
       register: ls_result
-      deletegate_to: localhost
+      delegate_to: localhost
       run_once: true
     
     - name: debug variable ls_result
