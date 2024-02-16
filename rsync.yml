@@ -31,7 +31,7 @@
 
     - name: Create directory /etc/opt/live
       ansible.builtin.file:
-        path: /etc/opt/live
+        path: "/etc/opt/live"
         state: directory
         owner: root
         group: root
@@ -39,8 +39,8 @@
 
     - name: Synchronize files and directories
       ansible.posix.synchronize:
-        src: /tmp/src/
-        dest: /etc/opt/live/
+        src: "/tmp/src/"
+        dest: "/etc/opt/live/"
         mode: push
         recursive: yes
         perms: True
