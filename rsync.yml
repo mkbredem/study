@@ -12,15 +12,25 @@
         mode: '0755'
       run_once: True
 
+    - name: show files in /tmp directory with permissions and ownership
+      ansible.builtin.command: ls -l /tmp/
+      register: ls_result
+      deletegate_to: localhost
+      run_once: true
+    
+    - name: debug variable ls_result
+      ansible.builtin.debug:
+        var: ls_result
+    
     - name: Copy /tmp/src directory from target to local
-      synchronize:
+      ansible.posix.synchronize:
         src: /tmp/src/
         dest: /tmp/src/
         mode: pull # Ensure we are pulling the files from the remote host to the control machine
       delegate_to: localhost
 
     - name: Create directory /etc/opt/live
-      file:
+      ansible.builtin.file:
         path: /etc/opt/live
         state: directory
         owner: root
