@@ -5,15 +5,17 @@
     - name: Ensure the destination directory exists on the local host
       local_action: 
         module: file
-        path: "/local/destination/path"
+        path: "/tmp/src/"
         state: directory
+        owner: root
+        group: root
         mode: '0755'
       run_once: True
 
     - name: Copy /tmp/src directory from target to local
       synchronize:
         src: /tmp/src/
-        dest: /local/destination/path
+        dest: /tmp/src/
         mode: pull # Ensure we are pulling the files from the remote host to the control machine
       delegate_to: localhost
 
@@ -24,9 +26,10 @@
         owner: root
         group: root
         mode: '0755'
+
     - name: Synchronize files and directories
       ansible.posix.synchronize:
-        src: /tmp/shell_scripts
+        src: /tmp/src
         dest: /etc/opt/live
         recursive: yes
         perms: True
