@@ -20,7 +20,7 @@
     
     - name: debug variable ls_result
       ansible.builtin.debug:
-        var: ls_result
+        var: ls_result.stdout | to_nice_yaml
     
     - name: Copy /tmp/src directory from target to local
       ansible.posix.synchronize:
@@ -43,4 +43,13 @@
         dest: /etc/opt/live
         recursive: yes
         perms: True
-      
+
+    - name: show files in tmp directory with permissions and ownership
+      ansible.builtin.command: ls -la /tmp/
+      register: ls_result
+      delegate_to: localhost
+      run_once: true
+    
+    - name: debug variable ls_result
+      ansible.builtin.debug:
+        var: ls_result.stdout | to_nice_yaml
