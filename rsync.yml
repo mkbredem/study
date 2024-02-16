@@ -39,8 +39,9 @@
 
     - name: Synchronize files and directories
       ansible.posix.synchronize:
-        src: /tmp/src
-        dest: /etc/opt/live
+        src: /tmp/src/
+        dest: /etc/opt/live/
+        mode: push
         recursive: yes
         perms: True
 
