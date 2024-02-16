@@ -29,5 +29,5 @@
         src: /tmp/shell_scripts
         dest: /etc/opt/live
         recursive: yes
-        perms: preserve
+        perms: True
       
