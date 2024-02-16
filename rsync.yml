@@ -1,8 +1,9 @@
 ---
 - name: Create directory /etc/opt/live with root:root ownership
-  hosts: "{{ target_hosts }}"
+  hosts: "{{ target_hosts }}" # this is just some server I build out a file structure on
   tasks:
-    - name: Ensure the destination directory exists on the local host
+  # Ignore the next couple of tasks.  I'm assuming you are trying to sync from a directory inside your EE, I'm creating this file structure instead of building a custom EE
+    - name: Ensure the destination directory exists on the local host (Execution Environment)
       local_action: 
         module: file
         path: "/tmp/src/"
@@ -11,23 +12,14 @@
         group: root
         mode: '0755'
       run_once: True
-
-    - name: show files in tmp directory with permissions and ownership in EE
-      ansible.builtin.command: ls -laR /tmp/
-      register: ls_result
-      delegate_to: localhost
-      run_once: true
-    
-    - name: debug variable ls_result
-      ansible.builtin.debug:
-        var: ls_result.stdout | to_nice_yaml
     
     - name: Copy /tmp/src directory from target to local
       ansible.posix.synchronize:
-        src: /tmp/src/
-        dest: /tmp/src/
+        src: /tmp/src/  # ownership for this directory should be the disired ownership for the dest directory you are syncing to
+        dest: /tmp/src/ # this is a directory with the same name within the EE container image
         mode: pull # Ensure we are pulling the files from the remote host to the control machine
       delegate_to: localhost
+  # Now I have a file structure I want to sync from within my EE.  This is where it starts looking like your environment
 
     - name: Create directory /etc/opt/live
       ansible.builtin.file:
@@ -46,11 +38,10 @@
         perms: True
 
     - name: show files in tmp directory with permissions and ownership on target_hosts
-      ansible.builtin.command: ls -laR /tmp/
+      ansible.builtin.command: ls -laR /etc/opt/live/
       register: ls_result
-      delegate_to: localhost
       run_once: true
     
     - name: debug variable ls_result
       ansible.builtin.debug:
-        var: ls_result.stdout | to_nice_yaml
+        var: ls_result.stdout_lines 
