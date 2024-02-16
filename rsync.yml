@@ -12,8 +12,8 @@
         mode: '0755'
       run_once: True
 
-    - name: show files in tmp directory with permissions and ownership
-      ansible.builtin.command: ls -la /tmp/
+    - name: show files in tmp directory with permissions and ownership in EE
+      ansible.builtin.command: ls -laR /tmp/
       register: ls_result
       delegate_to: localhost
       run_once: true
@@ -44,8 +44,8 @@
         recursive: yes
         perms: True
 
-    - name: show files in tmp directory with permissions and ownership
-      ansible.builtin.command: ls -la /tmp/
+    - name: show files in tmp directory with permissions and ownership on target_hosts
+      ansible.builtin.command: ls -laR /tmp/
       register: ls_result
       delegate_to: localhost
       run_once: true
