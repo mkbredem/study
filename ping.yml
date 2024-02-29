@@ -5,3 +5,6 @@
   tasks: 
     - name: ping hosts
       ping:
+
+    - name: gather facts
+      ansible.builtin.setup:
